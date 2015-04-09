@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
 namespace CPR
@@ -9,9 +10,6 @@ namespace CPR
 
         public static bool CheckCPR(int[] input)
         {
-            Contract.Requires<ArgumentNullException>(input != null);
-            Contract.Requires<InvalidOperationException>(input.Length == Factors.Length);
-
             int sum = 0;
             for (int x = 0; x < Factors.Length; x++)
             {
@@ -21,17 +19,15 @@ namespace CPR
             return sum % 11 == 0;
         }
 
-        public static bool CheckCPR(CPRNumber cpr)
+        public static bool CheckCPR(CprNumber cpr)
         {
-            Contract.Requires<ArgumentNullException>(cpr != null);
-
-            int[] input = new[]
-                              {
-                                  cpr.Date.Day/10, cpr.Date.Day%10, cpr.Date.Month/10, cpr.Date.Month%10,
-                                  (cpr.Date.Year/10)%10, cpr.Date.Year%10,
-                                  (cpr.SecretDigits/1000)%10, (cpr.SecretDigits/100)%10, (cpr.SecretDigits/10)%10,
-                                  cpr.SecretDigits%10
-                              };
+            int[] input =
+            {
+                cpr.Date.Day/10, cpr.Date.Day%10, cpr.Date.Month/10, cpr.Date.Month%10,
+                (cpr.Date.Year/10)%10, cpr.Date.Year%10,
+                (cpr.SecretDigits/1000)%10, (cpr.SecretDigits/100)%10, (cpr.SecretDigits/10)%10,
+                cpr.SecretDigits%10
+            };
 
             Contract.Assert(input.Length == Factors.Length);
 
@@ -43,16 +39,34 @@ namespace CPR
 
             return sum % 11 == 0;
         }
-    }
 
-    public class CPRNumber
-    {
-        public DateTime Date { get; set; }
-        public int SecretDigits { get; set; }
-
-        public override string ToString()
+        public static IEnumerable<CprNumber> Generate(DateTime date)
         {
-            return string.Format("{0:ddMMyy}-{1:0000}", Date, SecretDigits);
+            int rangeLow, rangeHigh;
+            if ((date.Year / 100) % 2 == 0)
+            {
+                // Even century. For example: 18xx, 20xx, 22xx
+                rangeLow = 5000;
+                rangeHigh = 9999;
+            }
+            else
+            {
+                // Odd century. For example: 19xx, 21xx, 23xx
+                rangeLow = 0;
+                rangeHigh = 4999;
+            }
+
+            for (int i = rangeLow; i <= rangeHigh; i++)
+            {
+                CprNumber c = new CprNumber();
+                c.Date = date;
+                c.SecretDigits = i;
+                c.Gender = c.SecretDigits % 2 == 0 ? CPRService.Gender.Female : CPRService.Gender.Male;
+
+                if (CheckCPR(c))
+                    yield return c;
+            }
         }
+
     }
 }

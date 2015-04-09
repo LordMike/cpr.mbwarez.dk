@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CPR.CPRWebService;
 using System.Linq;
 
 namespace CPR
@@ -27,17 +26,15 @@ namespace CPR
             }
 
             DateTime date = DateTime.Parse(txtDate.Text);
-            List<string> res;
+            IEnumerable<CprNumber> res = CPRUtilities.Generate(date).ToList();
 
             bool useGender = drpDownGender.Text == "Kvinde" || drpDownGender.Text == "Mand";
+            var gender = drpDownGender.Text == "Kvinde" ? CPRService.Gender.Female : CPRService.Gender.Male;
 
-            using (CPRServiceSoapClient client = new CPRServiceSoapClient())
-            {
-                res = useGender ? client.RetrieveCPRGender(date, drpDownGender.Text == "Kvinde" ? Gender.Female : Gender.Male).ToList()
-                              : client.RetrieveCPR(date).ToList();
-            }
+            if (useGender)
+                res = res.Where(s => s.Gender == gender);
 
-            rptPossibles.DataSource = res;
+            rptPossibles.DataSource = res.Select(s => s.ToString());
             rptPossibles.DataBind();
         }
 

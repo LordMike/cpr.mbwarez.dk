@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://cpr.mbwarez.dk/CPRService.asmx?wsdl" docRef="http://cpr.mbwarez.dk/CPRService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
-  <soap address="http://cpr.mbwarez.dk/CPRService.asmx" xmlns:q1="http://cpr.mbwarez.dk/CPRService" binding="q1:CPRServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-  <soap address="http://cpr.mbwarez.dk/CPRService.asmx" xmlns:q2="http://cpr.mbwarez.dk/CPRService" binding="q2:CPRServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-</discovery>
