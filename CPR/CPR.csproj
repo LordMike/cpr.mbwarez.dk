@@ -21,6 +21,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -95,6 +99,7 @@
   <ItemGroup>
     <Content Include="CPRCheck.aspx" />
     <Content Include="CPRService.asmx" />
+    <None Include="Properties\PublishProfiles\cpr.mbwarez.dk.pubxml" />
     <None Include="Service References\CPRWebService\CPR.CPRWebService.ArrayOfString.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
