@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Generator - Web</title>
+    <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <meta class="sr-only" content="" name="x-stylesheet-fallback-test">
+    <link href="css/site.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="./js/site.js"></script>
+</head>
+<body ng-app="cprApp" ng-cloak>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="/">CPR Generator</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/">Generator</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content" ng-controller="CprController as cpr">
+        <br>
+        <h3>Generator</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <p>Slå en dato op, og se alle mulige kombinationer af CPR numre på den dag.</p>
+            </div>
+            <div class="col-md-4">
+                <form action="/" method="get">
+                    <div class="form-group">
+                        <label for="cprDate">Dato</label>
+                        <input class="form-control" id="cprDate" type="date" ng-model="cprDate" placeholder="Dato">
+                    </div>
+                    <div class="form-group">
+                        <label for="frmGender">Køn</label>
+                        <select class="form-control" id="frmGender" ng-model="cprGender">
+                            <option selected="selected" value="either">
+                                Begge
+                            </option>
+                            <option value="male">
+                                Mand
+                            </option>
+                            <option value="female">
+                                Kvinde
+                            </option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <h4>
+                Der findes {{cpr.candidates(cprDate, cprGender).length}} numre for
+                <span ng-switch="cprGender">
+                    <span ng-switch-when="male" class="label label-info">Mænd</span>
+                    <span ng-switch-when="female" class="label label-warning">Kvinder</span>
+                    <span ng-switch-default>
+                        <span class="label label-info">Mænd</span> og 
+                        <span class="label label-warning">Kvinder</span>
+                    </span>
+                </span>
+                på denne dato
+            </h4>
+            <div ng-repeat="candidate in cpr.candidates(cprDate, cprGender) track by candidate.number" ng-switch="candidate.gender" class="col-md-1">
+                <span ng-switch-when="male" class="label label-info">{{candidate.number}}</span>
+                <span ng-switch-when="female" class="label label-warning">{{candidate.number}}</span>
+                <span ng-switch-default class="label label-default">{{candidate.number}}</span>
+            </div>
+        </div>
+        <hr>
+        <footer>
+            <p>&copy; 2017 - MBWarez</p>
+        </footer>
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
+</body>
+</html>
