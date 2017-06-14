@@ -29,7 +29,7 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
     this.checkCprPart = function (initialSum, partialNumber) {
         // InitialSum is the sum of the first 6 digits
         // PartialNumber is the last 4 digits, in string form
-        var sum = 0;
+        var sum = initialSum;
 
         for (var i = 0; i < 4; i++) {
             sum += parseInt(partialNumber[i]) * controlDigits[6 + i];
