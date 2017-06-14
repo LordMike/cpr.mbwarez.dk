@@ -80,5 +80,6 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
         this.candidateList = res;
     };
 
+    // Initial update
     this.updateCandidates();
 }]);
