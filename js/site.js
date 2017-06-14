@@ -11,13 +11,14 @@ var cprApp = angular.module('cprApp', []);
 
 // CPR JS
 cprApp.controller('CprController', ['$scope', function CprController($scope) {
-    var cpr = this;
     var controlDigits = [4, 3, 2, 7, 6, 5, 4, 3, 2, 1];
 
-    $scope.cprDate = new Date();
-    $scope.cprGender = 'either';
+    this.cprDate = new Date();
+    this.cprGender = 'either';
 
-    cpr.getGender = function (number) {
+    this.candidateList = [];
+
+    this.getGender = function (number) {
         // Number in form '0123456789' (no "-") (string)
         if (parseInt(number[9]) % 2 == 0)
             return 'female';
@@ -25,7 +26,7 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
         return 'male';
     }
 
-    cpr.checkCpr = function (number, gender) {
+    this.checkCpr = function (number, gender) {
         // Number in form '0123456789' (no "-")
         var sum = 0;
 
@@ -37,10 +38,12 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
             return false;
         }
 
-        return gender == 'either' || gender == cpr.getGender(number);
+        return gender == 'either' || gender == this.getGender(number);
     }
 
-    cpr.candidates = function (date, gender) {
+    this.updateCandidates = function () {
+        var date = this.cprDate;
+        var gender = this.cprGender;
 
         // Determine range to generate
         // Even centuries: 5000-9999
@@ -61,10 +64,10 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
         for (var i = lower; i < upper; i++) {
             var number = datePrefix + i.pad(4);
 
-            if (!cpr.checkCpr(number, gender))
+            if (!this.checkCpr(number, gender))
                 continue;
 
-            var numberGender = cpr.getGender(number);
+            var numberGender = this.getGender(number);
             var actualNumber = datePrefix + '-' + i.pad(4);
 
             // Valid CPR
@@ -74,6 +77,8 @@ cprApp.controller('CprController', ['$scope', function CprController($scope) {
             });
         }
 
-        return res;
+        this.candidateList = res;
     };
+
+    this.updateCandidates();
 }]);

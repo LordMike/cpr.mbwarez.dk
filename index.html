@@ -36,11 +36,11 @@
                 <form action="/" method="get">
                     <div class="form-group">
                         <label for="cprDate">Dato</label>
-                        <input class="form-control" id="cprDate" type="date" ng-model="cprDate" placeholder="Dato">
+                        <input class="form-control" id="cprDate" type="date" ng-model="cpr.cprDate" ng-change="cpr.updateCandidates()" placeholder="Dato">
                     </div>
                     <div class="form-group">
                         <label for="frmGender">Køn</label>
-                        <select class="form-control" id="frmGender" ng-model="cprGender">
+                        <select class="form-control" id="frmGender" ng-model="cpr.cprGender" ng-change="cpr.updateCandidates()">
                             <option selected="selected" value="either">
                                 Begge
                             </option>
@@ -57,21 +57,22 @@
         </div>
         <div class="row">
             <h4>
-                Der findes {{cpr.candidates(cprDate, cprGender).length}} numre for
-                <span ng-switch="cprGender">
+                Der findes {{cpr.candidateList.length}} numre for
+                <span ng-switch="cpr.cprGender">
                     <span ng-switch-when="male" class="label label-info">Mænd</span>
                     <span ng-switch-when="female" class="label label-warning">Kvinder</span>
                     <span ng-switch-default>
-                        <span class="label label-info">Mænd</span> og 
+                        <span class="label label-info">Mænd</span> og
                         <span class="label label-warning">Kvinder</span>
                     </span>
                 </span>
                 på denne dato
             </h4>
-            <div ng-repeat="candidate in cpr.candidates(cprDate, cprGender) track by candidate.number" ng-switch="candidate.gender" class="col-md-1">
-                <span ng-switch-when="male" class="label label-info">{{candidate.number}}</span>
-                <span ng-switch-when="female" class="label label-warning">{{candidate.number}}</span>
-                <span ng-switch-default class="label label-default">{{candidate.number}}</span>
+
+            <div ng-repeat="candidate in cpr.candidateList track by candidate.number"
+                 ng-class="{'label-warning': candidate.gender == 'female', 'label-info': candidate.gender == 'male'}"
+                 class="block label">
+                    {{candidate.number}}
             </div>
         </div>
         <hr>
